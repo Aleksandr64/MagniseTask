@@ -1,18 +1,39 @@
+using MagniseTask.Application.Service;
+using MagniseTask.Application.Service.Interfaces;
+using MagniseTask.Infrastructure.API.CoinApi;
+using MagniseTask.Infrastructure.API.CoinApi.Interface;
+using MagniseTask.Infrastructure.Repository;
+using MagniseTask.Infrastructure.Repository.Interface;
+using MagniseTask.Web.Controllers;
+using MagniseTask.Web.Middleware;
+using MagniseTask.Web.TempFile;
+using MagniseTask.Web.TempFile.Interface;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
+
+builder.Services.AddScoped<ICoinApiClient, CoinApiClient>();
+builder.Services.AddScoped<ICryptoRepository, CryptoRepository>();
+builder.Services.AddScoped<ICryptoInfoService, CryptoInfoService>();
+builder.Services.AddScoped<ICoinApiService, CoinApiService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
-using (var scoped = app.Services.CreateScope())
+builder.Services.AddHttpClient<ICryptoRepository, CryptoRepository>(client =>
 {
-    //TODO
-    /*var services = scoped.ServiceProvider;
-    var context = services.GetRequiredService<>();
-    context.Database.Migrate();*/
-}
+    client.BaseAddress = new Uri("http://localhost:5125");
+});
+
+var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
@@ -20,8 +41,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseExceptionHandler();
 
 app.MapControllers();
+app.MapHub<CryptoHub>("/cryptoTrade");
 
 app.Run();
