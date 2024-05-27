@@ -1,26 +1,26 @@
+using System.Net.Http.Headers;
 using MagniseTask.Application.Service;
 using MagniseTask.Application.Service.Interfaces;
-using MagniseTask.Infrastructure.API.CoinApi;
-using MagniseTask.Infrastructure.API.CoinApi.Interface;
+using MagniseTask.Infrastructure.CoinApi.Repository;
+using MagniseTask.Infrastructure.CoinApi.Repository.Interface;
 using MagniseTask.Infrastructure.Repository;
 using MagniseTask.Infrastructure.Repository.Interface;
 using MagniseTask.Web.Controllers;
 using MagniseTask.Web.Middleware;
-using MagniseTask.Web.TempFile;
-using MagniseTask.Web.TempFile.Interface;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddOptions();
 
 builder.Services.AddHttpClient();
 
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 
-builder.Services.AddScoped<ICoinApiClient, CoinApiClient>();
 builder.Services.AddScoped<ICryptoRepository, CryptoRepository>();
-builder.Services.AddScoped<ICryptoInfoService, CryptoInfoService>();
-builder.Services.AddScoped<ICoinApiService, CoinApiService>();
+builder.Services.AddScoped<ICryptoService, CryptoService>();
+builder.Services.AddScoped<ICoinApiRepository, CoinApiRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -28,10 +28,21 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-builder.Services.AddHttpClient<ICryptoRepository, CryptoRepository>(client =>
+builder.Services.AddHttpClient<ICryptoRepository, CryptoRepository>((serviceProvider, client) =>
 {
-    client.BaseAddress = new Uri("http://localhost:5125");
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var baseUrl = configuration["CryptoApiSettings:InternalDockerBaseUrl"];
+    client.BaseAddress = new Uri(baseUrl);
 });
+
+builder.Services.AddHttpClient<ICoinApiRepository, CoinApiRepository>((serviceProvider, client) =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    client.BaseAddress = new Uri(configuration["CoinApi:BaseHttpUrl"]); 
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    client.DefaultRequestHeaders.Add("X-CoinAPI-Key", configuration["CoinApi:MarketDataApiToken"]);
+});
+
 
 var app = builder.Build();
 

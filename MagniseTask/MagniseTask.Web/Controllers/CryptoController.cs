@@ -1,12 +1,6 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
-using MagniseTask.Application.Service.Interfaces;
-using MagniseTask.Domain.Constants;
-using MagniseTask.Domain.Exceptions;
+﻿using MagniseTask.Application.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
-using WebSocketSharp;
 
 namespace MagniseTask.Web.Controllers;
 
@@ -15,22 +9,25 @@ namespace MagniseTask.Web.Controllers;
 public class CryptoController : Controller
 {
     private readonly IHubContext<CryptoHub> _hubContext;
-    private readonly ICryptoInfoService _cryptoInfoService;
+    private readonly ICryptoService _cryptoService;
 
-    public CryptoController(IHubContext<CryptoHub> hubContext, ICryptoInfoService cryptoInfoService)
+    public CryptoController(IHubContext<CryptoHub> hubContext, ICryptoService cryptoService)
     {
         _hubContext = hubContext;
-        _cryptoInfoService = cryptoInfoService;
+        _cryptoService = cryptoService;
     }
-
-    [HttpGet("AssetsCrypto")]
-    public async Task<IActionResult> GetAssetsCrypto()
+    
+    
+    [HttpGet("CryptoPare")]
+    public async Task<IActionResult> GetSymbols(string filterSymbolId)
     {
-        var result = await _cryptoInfoService.GetSupportedCryptoCurrencies();
+        var result = await _cryptoService.GetCryptoPair(filterSymbolId);
         return Ok(result);
     }
 
-    [HttpPost("Test")]
+    [HttpPost("SendWebSocketMessage")]
+    [SameServerOnly]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<IActionResult> SendWebSocketData(string connectionId, string data)
     {
         await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveMessage", data);
