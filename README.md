@@ -62,16 +62,16 @@ Click on the Params tab and add the following parameter if you want to filter by
 For testing endpoint you can use this params
 
 #### With Exchanges
-  *BITSTAMP_SPOT_BTC_USD - trading pair Bitcoin to USD on Bitstamp.
-  *BINANCE_SPOT_ETH_USDT - trading pair Ethereum to Tether on Binance.
-  *COINBASE_SPOT_LTC_BTC - trading pair Litecoin to Bitcoin on Coinbase.
-  *KRAKEN_SPOT_XRP_EUR - trading pair Ripple to EUR on Kraken.
-  *HITBTC_SPOT_BCH_USD - trading pair Bitcoin Cash to USD on HitBTC.
+  - BITSTAMP_SPOT_BTC_USD - trading pair Bitcoin to USD on Bitstamp.
+  - BINANCE_SPOT_ETH_USDT - trading pair Ethereum to Tether on Binance.
+  - COINBASE_SPOT_LTC_BTC - trading pair Litecoin to Bitcoin on Coinbase.
+  - KRAKEN_SPOT_XRP_EUR - trading pair Ripple to EUR on Kraken.
+  - HITBTC_SPOT_BCH_USD - trading pair Bitcoin Cash to USD on HitBTC.
   
 #### Without Exchanges
-  *SPOT_BTC_USD - trading pair Bitcoin to USD.
-  *SPOT_ETH_USDT - trading pair Ethereum to Tether.
-  *SPOT_LTC_BTC - trading pair Litecoin to Bitcoin.
+  - SPOT_BTC_USD - trading pair Bitcoin to USD.
+  - SPOT_ETH_USDT - trading pair Ethereum to Tether.
+  - SPOT_LTC_BTC - trading pair Litecoin to Bitcoin.
 
 ---
 # Testing WebSocket Endpoint with Postman
