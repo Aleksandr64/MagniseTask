@@ -89,6 +89,7 @@ ws://localhost:5000/cryptoTrade
 ### Protocol details
 After connection you must send Protocol details
 
+**Symbol in the end json show uncorectly in Github so get this symbol from ReamdFile code.**
 ```
 {
     "protocol": "json",

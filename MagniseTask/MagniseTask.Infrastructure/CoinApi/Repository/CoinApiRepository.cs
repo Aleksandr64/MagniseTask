@@ -44,17 +44,23 @@ namespace MagniseTask.Infrastructure.CoinApi.Repository
                 throw new ApiException(response.ReasonPhrase, response.StatusCode, response.Content);
             }
         }
-        public async Task StartAsync(string connectionId, string[] message) 
-        { 
-            var ws = new ClientWebSocket(); 
- 
-            await ws.ConnectAsync(new Uri(_configuration["CoinApi:WebSocketUrl"]!), CancellationToken.None); 
- 
-            if (ws.State == WebSocketState.Open) 
+        public async Task StartAsync(string connectionId, string[] message)
+        {
+            var ws = CoinApiWebSocketManager.GetSocket(connectionId);
+            
+            if (ws == null) 
             { 
-                CoinApiWebSocketManager.AddSocket(connectionId, ws); 
-                _ = ReceiveMessagesAsync(ws, connectionId); 
- 
+                ws = new ClientWebSocket(); 
+                await ws.ConnectAsync(new Uri(_configuration["CoinApi:WebSocketUrl"]!), CancellationToken.None);
+                if (ws.State == WebSocketState.Open)
+                {
+                    CoinApiWebSocketManager.AddSocket(connectionId, ws);
+                    _ = ReceiveMessagesAsync(ws, connectionId);
+                }
+            } 
+            
+            if (ws.State == WebSocketState.Open) 
+            {
                 var subscriptionMessage = new 
                 { 
                     type = "hello", 
@@ -91,13 +97,7 @@ namespace MagniseTask.Infrastructure.CoinApi.Repository
                 } 
             } 
         } 
- 
-        private async Task SendMessageAsync(ClientWebSocket ws, string message) 
-        { 
-            var bytes = Encoding.UTF8.GetBytes(message); 
-            await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None); 
-        } 
- 
+        
         public async Task StopAsync(string connectionId) 
         { 
             var ws = CoinApiWebSocketManager.GetSocket(connectionId); 
@@ -108,5 +108,11 @@ namespace MagniseTask.Infrastructure.CoinApi.Repository
                 CoinApiWebSocketManager.RemoveSocket(connectionId);
             } 
         }
+        
+        private async Task SendMessageAsync(ClientWebSocket ws, string message) 
+        { 
+            var bytes = Encoding.UTF8.GetBytes(message); 
+            await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None); 
+        } 
     }
 }
