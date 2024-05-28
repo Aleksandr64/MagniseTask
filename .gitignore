@@ -62,10 +62,6 @@ _ReSharper.Caches/
 *.nupkg
 *.nuget
 
-# Docker
-**/[Dd]ockerfile*
-**/[Dd]ocker-compose*
-
 # Node
 node_modules/
 npm-debug.log

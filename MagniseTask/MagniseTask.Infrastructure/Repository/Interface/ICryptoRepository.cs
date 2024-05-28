@@ -2,5 +2,5 @@
 
 public interface ICryptoRepository
 {
-    public Task SendWebSocketMessage(string connectionId, string data);
+    public Task SendWebSocketMessage(string connectionId, string method, string data);
 }

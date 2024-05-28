@@ -15,9 +15,9 @@ namespace MagniseTask.Infrastructure.Repository
             _httpClient = httpClient;
         }
 
-        public async Task SendWebSocketMessage(string connectionId, string data)
+        public async Task SendWebSocketMessage(string connectionId, string method,  string data)
         {
-            var query = $"?connectionId={Uri.EscapeDataString(connectionId)}&data={Uri.EscapeDataString(data)}";
+            var query = $"?connectionId={Uri.EscapeDataString(connectionId)}&method={Uri.EscapeDataString(method)}&data={Uri.EscapeDataString(data)}";
             var url = "Crypto/SendWebSocketMessage" + query;
 
             await _httpClient.PostAsync(url, null);

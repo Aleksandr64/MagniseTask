@@ -64,8 +64,7 @@ namespace MagniseTask.Infrastructure.CoinApi.Repository
                     subscribe_filter_symbol_id = message
                 }; 
  
-                string jsonMessage = JsonConvert.SerializeObject(subscriptionMessage); 
-                Console.WriteLine("Sending subscription message: " + jsonMessage); 
+                string jsonMessage = JsonConvert.SerializeObject(subscriptionMessage);
                 await SendMessageAsync(ws, jsonMessage); 
             } 
         } 
@@ -76,15 +75,19 @@ namespace MagniseTask.Infrastructure.CoinApi.Repository
  
             while (ws.State == WebSocketState.Open) 
             { 
-                var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None); 
+                var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 if (result.MessageType == WebSocketMessageType.Text) 
                 { 
                     var message = Encoding.UTF8.GetString(buffer, 0, result.Count); 
-                    await _cryptoRepository.SendWebSocketMessage(connectionId, message); 
+                    await _cryptoRepository.SendWebSocketMessage(connectionId, "ReceiveMessage",message); 
                 } 
                 else if (result.MessageType == WebSocketMessageType.Close)
                 {
-                    await StopAsync(connectionId);  
+                    await StopAsync(connectionId);
+                    if (result.CloseStatusDescription != null)
+                    {
+                        await _cryptoRepository.SendWebSocketMessage(connectionId, "Disconnect",result.CloseStatusDescription);
+                    }
                 } 
             } 
         } 

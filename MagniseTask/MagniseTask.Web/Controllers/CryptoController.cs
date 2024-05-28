@@ -1,4 +1,5 @@
 ﻿using MagniseTask.Application.Service.Interfaces;
+using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -28,9 +29,9 @@ public class CryptoController : Controller
     [HttpPost("SendWebSocketMessage")]
     [SameServerOnly]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public async Task<IActionResult> SendWebSocketData(string connectionId, string data)
+    public async Task<IActionResult> SendWebSocketData(string connectionId, string method,  string data)
     {
-        await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveMessage", data);
+        await _hubContext.Clients.Client(connectionId).SendAsync(method, data);
         return Ok();
     }
 }
