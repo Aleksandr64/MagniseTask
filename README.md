@@ -15,11 +15,13 @@ Ensure you have the following installed on your system:
 
 Ensure your project directory includes the following files:
 
+```
 **MagniseTask/**
 │
 ├── **docker-compose.yml**
 └── **MagniseTask.Web/**
     └── **Dockerfile**
+```
 
 Navigate to the Project Directory:
 Open your terminal and navigate to the directory containing your docker-compose.yml file:
