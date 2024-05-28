@@ -81,54 +81,57 @@ This provides instructions on how to test the cryptoTrade WebSocket endpoint usi
 ## Endpoint Details
 
 ### WebSocket URL:
+
 ```
 ws://localhost:5000/cryptoTrade
 ```
 
 ### Protocol details
 After connection you must send Protocol details
-```json
+
+```
 {
     "protocol": "json",
     "version": 1
 }
 ```
+
 ### Message
 
 When web socket start sent heartbeat you can send message for subscribe trade
 In arguments you can change which trade you want get from CoinApi
 
-  -#### Example 1
-  ```json
-  {
-      "arguments": [["BITSTAMP_SPOT_BTC_USD$", "BITFINEX_SPOT_BTC_LTC$"]],
-      "invocationId" : "0", 
-      "target" : "Send", 
-      "type" : 1
-  }
-  ```
+#### Example 1
+```
+{
+    "arguments": [["BITSTAMP_SPOT_BTC_USD$", "BITFINEX_SPOT_BTC_LTC$"]],
+    "invocationId" : "0", 
+    "target" : "Send", 
+    "type" : 1
+}
+```
 
-  -#### Example 1
-  ```json
-  {
-      "arguments": [["BITSTAMP_SPOT_BTC_USD$", "BITFINEX_SPOT_BTC_LTC$"]],
-      "invocationId" : "0", 
-      "target" : "Send", 
-      "type" : 1
-  }
-  ```
+#### Example 1
+```
+{
+    "arguments": [["BITSTAMP_SPOT_BTC_USD$", "BITFINEX_SPOT_BTC_LTC$"]],
+    "invocationId" : "0", 
+    "target" : "Send", 
+    "type" : 1
+}
+```
 
 ### Disconect
 
 For Disconect port you must send this message or Disconnect in Posman
 
-```json
+```
 {
     "arguments": [],
     "invocationId": "0",
     "target": "Disconnect",
     "type": 1
-}
+}
 ```
 
 ### Review the Responses:
