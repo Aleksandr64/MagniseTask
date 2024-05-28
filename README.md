@@ -93,7 +93,7 @@ After connection you must send Protocol details
 {
     "protocol": "json",
     "version": 1
-}
+}``
 ```
 
 ### Message
