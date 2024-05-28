@@ -112,10 +112,10 @@ In arguments you can change which trade you want get from CoinApi
 }
 ```
 
-#### Example 1
+#### Example 2
 ```
 {
-    "arguments": [["BITSTAMP_SPOT_BTC_USD$", "BITFINEX_SPOT_BTC_LTC$"]],
+    "arguments": [["BITSTAMP_SPOT_BTC_USD$", "BITFINEX_SPOT_BTC_LTC$", "COINBASE_", "ITBIT_"]],
     "invocationId" : "0", 
     "target" : "Send", 
     "type" : 1
